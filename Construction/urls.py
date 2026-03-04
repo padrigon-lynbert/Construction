@@ -21,6 +21,7 @@ from core.views import core_spa
 urlpatterns = [
     path('', core_spa, name="core_spa"),
     path('admin/', admin.site.urls),
-    path('quotation/', include('quotation.urls')),
     path('core/', include('core.urls')),
+    path('quotation/', include('quotation.urls')),
+    path('quotation/', include('lead_management.urls')),
 ]

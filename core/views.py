@@ -6,6 +6,3 @@ def dashboard(request):
 
 def core_spa(request):
     return render(request, 'core_spa.html')
-
-def quotation(request):
-    return render(request, "quotation.html")

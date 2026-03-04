@@ -3,5 +3,5 @@ import quotation
 from . import views
 
 urlpatterns = [
-    path("quotation/", views.quotation, name="quotation"),
+    path("leads/", views.leads, name="leads"),
 ]

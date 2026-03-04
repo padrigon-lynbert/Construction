@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/dashboard.css">
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <div class="sidebar" id="sidebar">
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <span class="logo-full">Title</span>
+            <span class="logo-mini">T</span>
+        </button>
+        
+        <ul>
+            <li onclick="loadContent('{% url 'dashboard' %}')">
+                <span class="menu-logo">[D]</span>
+                <span class="menu-text">Dashboard</span>
+            </li>
+            <li onclick="loadContent('{% url 'leads' %}')">
+                 <span class="menu-logo">[L]</span>
+                <span class="menu-text">Leads</span>
+            </li>
+            <li onclick="loadContent('{% url 'quotation' %}')">
+                <span class="menu-logo">[Q]</span>
+                <span class="menu-text">Quotations</span>
+            </li>
+        </ul>
+    </div>
+    <div class="content">
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+            </tr>
+            <tr>
+                <td>John Doe</td>
+                <td>john@example.com</td>
+                <td>123-456-7890</td>
+            </tr>
+        </table>
+    </div>
+</body>
+<script src="/static/sidebar.js"></script>
+<script src="/static/content_ajax.js"></script>
+</html>

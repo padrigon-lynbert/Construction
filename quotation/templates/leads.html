@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leads</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        th {
+            padding: 0.5rem 1rem;
+            text-align: left;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        td {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            color: #4b5563;
+            border-bottom: 1px solid #e5e7eb;
+        }
+    </style>
+</head>
+<body class="p-10 bg-gray-100">
+
+    <table class="min-w-full bg-white border border-gray-300 shadow-md rounded-lg overflow-hidden">
+        <thead class="bg-gray-100">
+            <tr>
+                <th>Company</th>
+                <th>Contact</th>
+                <th>Project Type</th>
+                <th>Status</th>
+                <th>Deadline</th>
+                <th>Notes</th>
+                <th>Quotation Sent?</th>
+                <th>Cost</th>
+                <th>Quote</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Netherbuild</td>
+                <td>0232132</td>
+                <td>House</td>
+                <td>Status</td>
+                <td>01/01/2026</td>
+                <td>Notes</td>
+                <td>Yes</td>
+                <td>1000.00</td>
+                <td>
+                    <a href="">
+                        <button>Quote</button>
+                    </a>
+                </td>
+            </tr><tr>
+                <td>Snake</td>
+                <td>0232132</td>
+                <td>House</td>
+                <td>Status</td>
+                <td>01/01/2026</td>
+                <td>Notes</td>
+                <td>Yes</td>
+                <td>1000.00</td>
+                <td>
+                    <a href="">
+                        <button>Quote</button>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+<div class="flex justify-end p-6">
+    <a href="{% url 'dash' %}" class="p-5 py-2 bg-gray-800 text-white hover:bg-gray-500">Dash</a>
+</div>
+
+<button onclick="openModal()" 
+        class="px-4 py-2 bg-blue-600 text-white rounded">
+    Open Modal
+</button>
+
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+  <div class="bg-white p-6 rounded shadow-lg w-96">
+    <h2 class="text-lg font-semibold mb-4">Modal Title</h2>
+    <p class="mb-4">Content here.</p>
+    <button onclick="closeModal()" 
+            class="px-4 py-2 bg-gray-800 text-white rounded">
+      Close
+    </button>
+  </div>
+</div>
+
+<script>
+function openModal() {
+    document.getElementById("modal").classList.remove("hidden");
+}
+
+function closeModal() {
+    document.getElementById("modal").classList.add("hidden");
+}
+</script>
+</div>
+</body>
+</html>

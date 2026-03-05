@@ -1,0 +1,16 @@
+.leads_table th {
+    padding: 0.5rem 1rem;
+    text-align: left;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.leads_table td {
+    padding: 0.5rem 1rem;
+    padding-right: 0;
+    font-size: 0.875rem;
+    color: #4b5563;
+    border-bottom: 1px solid #e5e7eb;
+}

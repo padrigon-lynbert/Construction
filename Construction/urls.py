@@ -23,5 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('core/', include('core.urls')),
     path('quotation/', include('quotation.urls')),
-    path('quotation/', include('lead_management.urls')),
+    path('lead_management/', include('lead_management.urls')),
 ]

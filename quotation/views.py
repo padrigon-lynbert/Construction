@@ -6,3 +6,8 @@ from django.shortcuts import render
 
 def quotation(request):
     return render(request, "quotation.html")
+
+def individual_quotation(request):
+    return render(request, "individual_quotation.html")
+
+

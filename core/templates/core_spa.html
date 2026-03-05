@@ -37,4 +37,10 @@
 </body>
 <script src="/static/sidebar.js"></script>
 <script src="/static/content_ajax.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // default to dashboard when opening the app
+    loadContent("{% url 'dashboard' %}");
+});
+</script>
 </html>

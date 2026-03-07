@@ -1,52 +1,56 @@
 <html lang="en">
 <div class="leads_body p-10 bg-gray-100">
 
-    <table class="leads_table min-w-full bg-white border border-gray-300 shadow-md rounded-lg overflow-hidden">
-        <thead class="bg-gray-100">
-            <tr>
-                <th>Company Name</th>
-                <th>Contact Person</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Project Type</th>
-                <th>Lead Source</th>
-                <th>Status</th>
-                <th>Estimated Budget</th>
-                <th>Deadline</th>
-                <th>Notes</th>
-                <th>Assigned To</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Netherbuild</td>
-                <td>Padrigon, Siv</td>
-                <td>0232132</td>
-                <td>test@gmail.com</td>
-                <td>House Renovation</td>
-                <td>Referrals</td>
-                <td>New</td>
-                <td>100</td>
-                <td>01/01/2026</td>
-                <td>Notes</td>
-                <td>Yes</td>
+    <p class="text- text-gray-800 mb-4"> Result of the selected cell</p>
 
-            </tr>
-            <tr>
-                <td>Snake</td>
-                <td>0232132</td>
-                <td>House</td>
-                <td>Status</td>
-                <td>01/01/2026</td>
-                <td>Notes</td>
-                <td>Yes</td>
-                <td>1000.00</td>
-                <td>01/01/2026</td>
-                <td>Notes</td>
-                <td>u</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table_wrapper">
+        <table class="leads_table min-w-full bg-white border border-gray-300 shadow-md rounded-lg overflow-hidden">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th>Company Name</th>
+                    <th>Contact Person</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Project Type</th>
+                    <th>Lead Source</th>
+                    <th>Status</th>
+                    <th>Estimated Budget</th>
+                    <th>Deadline</th>
+                    <th>Notes</th>
+                    <th>Assigned To</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td contenteditable="True" id="company_name">Netherbuild</td>
+                    <td contenteditable="True" id="contact_person">John Doe</td>
+                    <td contenteditable="True" id="phone">0232132</td>
+                    <td contenteditable="True" id="email">test@gmail.com</td>
+                    <td contenteditable="True" id="project_type">House Renovation</td>
+                    <td contenteditable="True" id="lead_source">Referrals</td>
+                    <td contenteditable="True" id="status">New</td>
+                    <td contenteditable="True" id="estimated_budget">100</td>
+                    <td contenteditable="True" id="deadline">2026-03-05</td>
+                    <td contenteditable="True" id="notes">ako na yata ang pinaka magandang lalaki sa mundo</td>
+                    <td contenteditable="True" id="assigned_to">Assigned User</td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="company_name"></td>
+                    <td><input type="text" name="contact_person"></td>
+                    <td><input type="text" name="phone"></td>
+                    <td><input type="email" name="email"></td>
+                    <td><input type="text" name="project_type"></td>
+                    <td><input type="text" name="lead_source"></td>
+                    <td><input type="text" name="status"></td>
+                    <td><input type="number" name="estimated_budget"></td>
+                    <td><input type="date" name="date"></td>
+                    <td><input type="text" name="notes"></td>
+                    <td><input type="text" name="assigned_to"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
 
 </div>
 </html>

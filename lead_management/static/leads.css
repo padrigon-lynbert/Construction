@@ -14,3 +14,9 @@
     color: #4b5563;
     border-bottom: 1px solid #e5e7eb;
 }
+
+
+.table_wrapper {
+    overflow-x: auto;
+    padding-bottom: 16px;
+}

@@ -5,8 +5,138 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Individual Quotation</title>
 </head>
+
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+    }
+
+    .target_info{
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .top_bar{
+        padding: 2rem;
+    }
+    
+    .top_bar_project_info{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .top_bar_target_info{
+           padding-left: 1rem;
+    }
+
+    .bottom-bar{
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .individual_quotation_table{
+        margin: 2rem;
+    }
+
+</style>
 <body>
-    <p>individual quotation content</p>
+    
+    <form action="">
+
+        <div class="top_bar">
+            <div class="top_bar_project_info">
+                <h1 contenteditable="True">House Renovation</h1> 
+                <button type="button" >help</button>
+            </div>
+            
+            <div class="top_bar_target_info" style="display: flex; gap: 0.5rem;">
+                <label for="customer_name">Client:</label>
+                <p contenteditable="True">Padrigon, Siv</p>
+            </div>
+        </div>
+
+
+            
+            <div class="individual_quotation_table">
+                <table>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Quantity</th>
+                        <th>Unit Cost</th>
+                        <th>Autocost</th>
+                        <th></th>
+                    </tr>
+                    
+                    <tr>
+                        <td id="item_name" contenteditable="True"></td>
+                        <td ><input type="number" id="qty" value="10"></td>
+                        <td><input type="number" id="cost" value="100"></td>
+                        <td id="autocost" contenteditable="Flase">₱1000</td>
+                        <td><button type="button">delete</button></td>
+                    </tr>
+                    
+                    
+                </table>
+                <button type="button">add</button>
+            </div>
+
+            <div class="bottom-bar">
+                <p>margin:<input type="number" id="margin" value="20"> %</p>
+                <p>tax: <input type="number" id="tax" value="12"> %</p>
+            </div>
+            <span style="display: flex; gap: 0.5rem;">
+                 <b>subtotal:</b> <p id="subtotal"></p>
+            </span>
+            <button type="submit">Export</button>
+            
+        </form>
     
 </body>
+
+<script>
+    const qty = document.getElementById('qty');
+    const cost = document.getElementById('cost');
+    const autocost = document.getElementById('autocost');
+    
+    const margin = document.getElementById('margin');
+    const tax = document.getElementById('tax');
+    const subtotal = document.getElementById('subtotal');
+    
+    function calculateAutocost(){
+        const quantity = qty.value;
+        const unitCost = cost.value
+
+        const totalCost = quantity * unitCost;
+
+        autocost.textContent = `₱${totalCost}`;
+
+        calculateSubtotal();
+    }
+
+    function calculateSubtotal(){
+        const margin_value = parseFloat(margin.value);
+        const tax_value = parseFloat(tax.value);
+        autocost_value = parseFloat(autocost.textContent.replace("₱", ""));
+
+        
+        const subtotal_value = autocost_value + ((margin_value + tax_value) * autocost_value / 100);
+        subtotal.textContent = `₱${subtotal_value}`;
+    }
+
+    qty.addEventListener("input", calculateAutocost);
+    cost.addEventListener("input", calculateAutocost);
+    margin.addEventListener("input", calculateSubtotal);
+    tax.addEventListener("input", calculateSubtotal);
+
+
+    calculateAutocost();
+    calculateSubtotal();
+        
+</script>
 </html>

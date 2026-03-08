@@ -1,10 +1,25 @@
 <html lang="en">
+<style>
+table{
+    border-collapse: collapse;
+    table-layout: fixed;
+    min-width: 1200px;
+}
+
+td, th{
+    max-width: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+
+</style>
 <div class="leads_body p-10 bg-gray-100">
 
     <p class="text- text-gray-800 mb-4"> Result of the selected cell</p>
 
-    <div class="table_wrapper">
-        <table class="leads_table min-w-full bg-white border border-gray-300 shadow-md rounded-lg overflow-hidden">
+    <div class="table_wrapper ">
+        <table class="leads_table min-w-full bg-white border border-gray-300 shadow-md rounded-lg">
             <thead class="bg-gray-100">
                 <tr>
                     <th>Company Name</th>
@@ -21,36 +36,42 @@
                 </tr>
             </thead>
             <tbody>
+                {% for lead in leads %}
                 <tr>
-                    <td contenteditable="True" id="company_name">Netherbuild</td>
-                    <td contenteditable="True" id="contact_person">John Doe</td>
-                    <td contenteditable="True" id="phone">0232132</td>
-                    <td contenteditable="True" id="email">test@gmail.com</td>
-                    <td contenteditable="True" id="project_type">House Renovation</td>
-                    <td contenteditable="True" id="lead_source">Referrals</td>
-                    <td contenteditable="True" id="status">New</td>
-                    <td contenteditable="True" id="estimated_budget">100</td>
-                    <td contenteditable="True" id="deadline">2026-03-05</td>
-                    <td contenteditable="True" id="notes">ako na yata ang pinaka magandang lalaki sa mundo</td>
-                    <td contenteditable="True" id="assigned_to">Assigned User</td>
+                    <td class="cell" contenteditable="true" tabindex="0">{{ lead.company_name }}</td>
+                    <td contenteditable="true">{{ lead.contact_person }}</td>
+                    <td contenteditable="true">{{ lead.phone }}</td>
+                    <td contenteditable="true">{{ lead.email }}</td>
+                    <td contenteditable="true">{{ lead.project_type }}</td>
+                    <td contenteditable="true">{{ lead.lead_source }}</td>
+                    <td contenteditable="true">{{ lead.status }}</td>
+                    <td contenteditable="true">{{ lead.estimated_budget }}</td>
+                    <td contenteditable="true">{{ lead.deadline }}</td>
+                    <td><textarea name="notes" rows="1" class="w-full">{{ lead.notes }}</textarea></td>
+                    <td contenteditable="true">{{ lead.assigned_to }}</td>
                 </tr>
-                <tr>
-                    <td><input type="text" name="company_name"></td>
-                    <td><input type="text" name="contact_person"></td>
-                    <td><input type="text" name="phone"></td>
-                    <td><input type="email" name="email"></td>
-                    <td><input type="text" name="project_type"></td>
-                    <td><input type="text" name="lead_source"></td>
-                    <td><input type="text" name="status"></td>
-                    <td><input type="number" name="estimated_budget"></td>
-                    <td><input type="date" name="date"></td>
-                    <td><input type="text" name="notes"></td>
-                    <td><input type="text" name="assigned_to"></td>
-                </tr>
+                {% endfor %}
+
             </tbody>
         </table>
     </div>
 
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    const cells = document.querySelectorAll(".cell");  // all cells with class
+
+    cells.forEach(cell => {
+        cell.addEventListener("blur", function() {
+            console.log("Cell lost focus!");
+            console.log("Value:", this.textContent);
+        });
+    });
+
+});
+</script>
+
 
 </div>
+
 </html>

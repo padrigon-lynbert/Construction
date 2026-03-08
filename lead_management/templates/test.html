@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>test</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Header 1</th>
+            <th>Header 2</th>
+        </tr>
+        {% for lead in leads %}
+        <tr data-id="{{ lead.id }}">
+            <td contenteditable="true" class="cell" data-field="company_name">{{ lead.company_name }}</td>
+            <td contenteditable="true" class="cell" data-field="contact_person">{{ lead.contact_person }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+<script>
+    // function to get cookie value by name
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // get CSRF token from cookie
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const cells = document.querySelectorAll(".cell");
+
+        cells.forEach(cell => {
+            cell.setAttribute("tabindex", "0"); 
+
+            cell.addEventListener("blur", function() {
+                const rowId = this.closest("tr").dataset.id;
+                const field = this.dataset.field;
+                const value = this.textContent;
+                const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                console.log("Row ID:", rowId);
+                console.log("Field:", field);
+                console.log("Value:", value);
+
+                // send to Django via fetch
+                fetch("/lead_management/update_lead/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrftoken
+                    },
+                    body: JSON.stringify({
+                        id: rowId,
+                        field: field,
+                        value: value
+                    })
+                })
+                .then(response => response.json())
+                .then(data => console.log("Update result:", data))
+                .catch(error => console.error("Error:", error));
+            });
+        });
+
+    });
+</script>
+    
+</body>
+</html>

@@ -51,13 +51,13 @@
 
         <div class="top_bar">
             <div class="top_bar_project_info">
-                <h1 contenteditable="True">House Renovation</h1> 
-                <button type="button" >help</button>
+                <h1 contenteditable="True">{{ project.name }}</h1> 
+                <button type="button">help</button>
             </div>
             
             <div class="top_bar_target_info" style="display: flex; gap: 0.5rem;">
                 <label for="customer_name">Client:</label>
-                <p contenteditable="True">Padrigon, Siv</p>
+                <p contenteditable="True">{{ project.client_name }}</p>
             </div>
         </div>
 
@@ -72,15 +72,16 @@
                         <th>Autocost</th>
                         <th></th>
                     </tr>
-                    
-                    <tr>
-                        <td id="item_name" contenteditable="True"></td>
-                        <td ><input type="number" id="qty" value="10"></td>
-                        <td><input type="number" id="cost" value="100"></td>
-                        <td id="autocost" contenteditable="Flase">₱1000</td>
-                        <td><button type="button">delete</button></td>
-                    </tr>
-                    
+                   {% for item in project.items.all %}
+                        <tr>
+                            <td id="item_name" contenteditable="True">{{ item.item_name }}</td>
+                            <td><input type="number" class="qty" value="{{ item.quantity }}"></td>
+                            <td><input type="number" class="cost" value="{{ item.unit_cost }}"></td>
+                            <td class="autocost" contenteditable="False"></td>
+                            <td><button type="button">delete</button></td>
+                        </tr>
+                    {% endfor %}
+                   
                     
                 </table>
                 <button type="button">add</button>
@@ -100,43 +101,46 @@
 </body>
 
 <script>
-    const qty = document.getElementById('qty');
-    const cost = document.getElementById('cost');
-    const autocost = document.getElementById('autocost');
-    
     const margin = document.getElementById('margin');
     const tax = document.getElementById('tax');
     const subtotal = document.getElementById('subtotal');
-    
-    function calculateAutocost(){
-        const quantity = qty.value;
-        const unitCost = cost.value
 
-        const totalCost = quantity * unitCost;
+    // calculate costs and subtotal whenever quantity, cost, margin, or tax changes (fire)
+    function calculateAll() {
+        const rows = document.querySelectorAll(".individual_quotation_table table tr");
+        let subtotal_value = 0;
 
-        autocost.textContent = `₱${totalCost}`;
+        rows.forEach(row => {
+            const qtyInput = row.querySelector(".qty");
+            const costInput = row.querySelector(".cost");
+            const autocostTd = row.querySelector(".autocost");
+            if (!qtyInput || !costInput || !autocostTd) return;
 
-        calculateSubtotal();
-    }
+            const quantity = parseFloat(qtyInput.value) || 0;
+            const unitCost = parseFloat(costInput.value) || 0;
+            const totalCost = quantity * unitCost;
 
-    function calculateSubtotal(){
-        const margin_value = parseFloat(margin.value);
-        const tax_value = parseFloat(tax.value);
-        autocost_value = parseFloat(autocost.textContent.replace("₱", ""));
+            autocostTd.textContent = `₱${totalCost}`;
+            subtotal_value += totalCost;
+        });
 
-        
-        const subtotal_value = autocost_value + ((margin_value + tax_value) * autocost_value / 100);
+        // apply margin and tax
+        const margin_value = parseFloat(margin.value) || 0;
+        const tax_value = parseFloat(tax.value) || 0;
+        subtotal_value = subtotal_value + ((margin_value + tax_value) * subtotal_value / 100);
+
         subtotal.textContent = `₱${subtotal_value}`;
     }
 
-    qty.addEventListener("input", calculateAutocost);
-    cost.addEventListener("input", calculateAutocost);
-    margin.addEventListener("input", calculateSubtotal);
-    tax.addEventListener("input", calculateSubtotal);
+    // attach input events
+    document.querySelectorAll(".qty, .cost").forEach(input => {
+        input.addEventListener("input", calculateAll);
+    });
+    margin.addEventListener("input", calculateAll);
+    tax.addEventListener("input", calculateAll);
 
 
-    calculateAutocost();
-    calculateSubtotal();
+calculateAll();
         
 </script>
 </html>

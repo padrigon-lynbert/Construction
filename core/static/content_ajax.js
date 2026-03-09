@@ -10,7 +10,7 @@ function loadContent(url) {
             if (url.includes("leads")) {
                 initLeadsTable(contentDiv);
             }
-            // you can add more pages in future
+            // add more pages in future
             // else if (url.includes("quotation")) { initQuotation(contentDiv); }
         });
 }
@@ -34,13 +34,13 @@ function initLeadsTable(container) {
         return cookieValue;
     }
 
+    // make cells editable and send updates on blur
     cells.forEach(cell => {
         cell.setAttribute("tabindex", "0");
         cell.addEventListener("blur", function() {
             const rowId = this.closest("tr").dataset.id;
             const field = this.dataset.field;
-            // const value = this.textContent;
-                const value = this.tagName === "INPUT" || this.tagName === "TEXTAREA" ? this.value : this.textContent;
+            const value = this.tagName === "INPUT" || this.tagName === "TEXTAREA" ? this.value : this.textContent;
             const csrftoken = getCookie('csrftoken');
 
             console.log("Row ID:", rowId);
@@ -59,7 +59,7 @@ function initLeadsTable(container) {
     });
 }
 
-
+// load default content on page load (you can change this to any page you want as default) the defaul is set to leads page in templates/core_spa.html
 document.addEventListener("DOMContentLoaded", function() {
-    loadContent(defaultPage); // default content when page loads
+    loadContent(defaultPage);
 });

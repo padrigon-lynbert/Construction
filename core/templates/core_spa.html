@@ -6,6 +6,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/static/dashboard.css">
     <link rel="stylesheet" href="/static/leads.css">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <title>Dashboard</title>
     {% load static %}
 </head>
@@ -35,12 +36,8 @@
 
     <div class="content"></div>
 </body>
+<script>const defaultPage = "{% url 'leads' %}";</script>
+
 <script src="/static/sidebar.js"></script>
 <script src="/static/content_ajax.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    // default to dashboard when opening the app
-    loadContent("{% url 'leads' %}");
-});
-</script>
 </html>

@@ -1,16 +1,16 @@
 <html lang="en">
 <style>
-table{
-    border-collapse: collapse;
-    table-layout: fixed;
-    min-width: 1200px;
-}
+    table{
+        border-collapse: collapse;
+        table-layout: fixed;
+        min-width: 1200px;
+    }
 
-td, th{
-    max-width: 150px;
-    overflow: hidden;
-    white-space: nowrap;
-}
+    td, th{
+        max-width: 150px;
+        overflow: hidden;
+        white-space: nowrap;
+    }
 
 
 </style>
@@ -22,6 +22,7 @@ td, th{
         <table class="leads_table min-w-full bg-white border border-gray-300 shadow-md rounded-lg">
             <thead class="bg-gray-100">
                 <tr>
+                    <!-- <th>test</th> -->
                     <th>Company Name</th>
                     <th>Contact Person</th>
                     <th>Phone</th>
@@ -37,38 +38,82 @@ td, th{
             </thead>
             <tbody>
                 {% for lead in leads %}
-                <tr>
-                    <td class="cell" contenteditable="true" tabindex="0">{{ lead.company_name }}</td>
-                    <td contenteditable="true">{{ lead.contact_person }}</td>
-                    <td contenteditable="true">{{ lead.phone }}</td>
-                    <td contenteditable="true">{{ lead.email }}</td>
-                    <td contenteditable="true">{{ lead.project_type }}</td>
-                    <td contenteditable="true">{{ lead.lead_source }}</td>
-                    <td contenteditable="true">{{ lead.status }}</td>
-                    <td contenteditable="true">{{ lead.estimated_budget }}</td>
-                    <td contenteditable="true">{{ lead.deadline }}</td>
-                    <td><textarea name="notes" rows="1" class="w-full">{{ lead.notes }}</textarea></td>
-                    <td contenteditable="true">{{ lead.assigned_to }}</td>
+                <tr data-id="{{ lead.id }}">
+                    <!-- <td>{{ lead.id }}</td> -->
+                    <td class="cell" contenteditable="true" tabindex="0" data-field="company_name">{{ lead.company_name }}</td>
+                    <td class="cell" contenteditable="true" tabindex="0" data-field="contact_person">{{ lead.contact_person }}</td>
+                    <td class="cell" contenteditable="true" tabindex="0" data-field="phone">{{ lead.phone }}</td>
+                    <td class="cell" contenteditable="true" tabindex="0" data-field="email">{{ lead.email }}</td>
+                    <td class="cell" contenteditable="true" tabindex="0" data-field="project_type"> {{ lead.project_type }}</td>
+                    <td class="cell" contenteditable="true" tabindex="0" data-field="lead_source">{{ lead.lead_source }}</td>
+                    <td class="cell" contenteditable="true" tabindex="0" data-field="status">{{ lead.status }}</td>
+                    <td class="cell" contenteditable="true" tabindex="0" data-field="estimated_budget">{{ lead.estimated_budget }}</td>
+                    <td>
+                        <input class="cell w-full" type="date" data-field="deadline"
+                               value="{{ lead.deadline|date:'Y-m-d' }}">
+                    </td>
+                    <td><textarea class="cell w-full" contenteditable="true" rows="1" data-field="notes">{{ lead.notes }}</textarea></td>
+                    <td class="cell" contenteditable="true" tabindex="0" data-field="assigned_to">{{ lead.assigned_to }}</td>
                 </tr>
                 {% endfor %}
-
             </tbody>
         </table>
     </div>
 
-    <script>
-document.addEventListener("DOMContentLoaded", function() {
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== ''){
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++){
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')){
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
 
-    const cells = document.querySelectorAll(".cell");  // all cells with class
+    // get CSRF token from cookie
+    document.addEventListener("DOMContentLoaded", function() {
 
-    cells.forEach(cell => {
-        cell.addEventListener("blur", function() {
-            console.log("Cell lost focus!");
-            console.log("Value:", this.textContent);
+        const cells = document.querySelectorAll(".cell");
+
+        cells.forEach(cell => {
+            cell.setAttribute("tabindex", "0"); 
+
+            cell.addEventListener("blur", function() {
+                const rowId = this.closest("tr").dataset.id;
+                const field = this.dataset.field;
+                const value = this.textContent;
+                const csrftoken = getCookie('csrftoken');
+
+                console.log("Row ID:", rowId);
+                console.log("Field:", field);
+                console.log("Value:", value);
+
+                // send to Django via fetch
+                fetch("/lead_management/update_lead/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrftoken
+                    },
+                    body: JSON.stringify({
+                        id: rowId,
+                        field: field,
+                        value: value
+                    })
+                })
+                .then(response => response.json())
+                // .then(data => console.log("Update result:", data))
+                .catch(error => console.error("Error:", error));
+            });
         });
-    });
 
-});
+    });
 </script>
 
 

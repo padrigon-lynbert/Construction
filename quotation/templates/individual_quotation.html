@@ -33,11 +33,12 @@
            padding-left: 1rem;
     }
 
-    .bottom-bar{
+    .indirect_cost-bar{
         display: flex;
         justify-content: left;
         align-items: center;
         gap: 2rem;
+        padding: 1rem;
     }
 
     .individual_quotation_table{
@@ -54,11 +55,34 @@
                 <h1 contenteditable="True">{{ project.name }}</h1> 
                 <button type="button">help</button>
             </div>
-            
+
             <div class="top_bar_target_info" style="display: flex; gap: 0.5rem;">
                 <label for="customer_name">Client:</label>
                 <p contenteditable="True">{{ project.client_name }}</p>
             </div>
+            
+            <span>
+                <details open>
+                    <summary >Project Details</summary>
+                    <p contenteditable="true">{{ project.details }}</p>
+                </details>
+            </span>
+
+        </div>
+
+        
+        <span style="display: flex; gap: 0.5rem; padding: 1rem;">
+            <b>subtotal:</b> <p id="subtotal"></p>
+        </span>
+            <details open>
+                <summary>View Details</summary>
+                <p style="white-space: pre;" id="subtotal_details"></p>
+            </details>
+
+        <div class="indirect_cost-bar">
+            <p>overhead: <input type="number" id="overhead" value="10"> %</p>
+            <p>margin:<input type="number" id="margin" value="10"> %</p>
+            <p>tax: <input type="number" id="tax" value="10"> %</p>
         </div>
 
 
@@ -87,13 +111,6 @@
                 <button type="button">add</button>
             </div>
 
-            <div class="bottom-bar">
-                <p>margin:<input type="number" id="margin" value="20"> %</p>
-                <p>tax: <input type="number" id="tax" value="12"> %</p>
-            </div>
-            <span style="display: flex; gap: 0.5rem;">
-                 <b>subtotal:</b> <p id="subtotal"></p>
-            </span>
             <button type="submit">Export</button>
             
         </form>
@@ -102,8 +119,10 @@
 
 <script>
     const margin = document.getElementById('margin');
+    const overhead = document.getElementById('overhead');
     const tax = document.getElementById('tax');
     const subtotal = document.getElementById('subtotal');
+    const subtotal_details = document.getElementById('subtotal_details');
 
     // calculate costs and subtotal whenever quantity, cost, margin, or tax changes (fire)
     function calculateAll() {
@@ -124,18 +143,30 @@
             subtotal_value += totalCost;
         });
 
-        // apply margin and tax
+        // apply margin and tax (percentages should compound)
+        const overhead_value = parseFloat(overhead.value) || 0;
         const margin_value = parseFloat(margin.value) || 0;
         const tax_value = parseFloat(tax.value) || 0;
-        subtotal_value = subtotal_value + ((margin_value + tax_value) * subtotal_value / 100);
 
-        subtotal.textContent = `₱${subtotal_value}`;
+        subtotal_value_no_index = subtotal_value;
+        subtotal_value_with_overhead = subtotal_value + (overhead_value / 100*subtotal_value);
+        vales_with_margin = subtotal_value_with_overhead + (margin_value / 100*subtotal_value_with_overhead);
+        vales_with_tax = vales_with_margin + (tax_value / 100*vales_with_margin);
+
+        subtotal_value = vales_with_tax;
+
+        subtotal.textContent = `₱${subtotal_value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        subtotal_details.textContent = 
+            `₱${subtotal_value_no_index} + ₱${subtotal_value_with_overhead - subtotal_value_no_index}\n` +
+            `₱${subtotal_value_with_overhead} + ₱${vales_with_margin - subtotal_value_with_overhead}\n` +
+            `₱${vales_with_margin} + ₱${vales_with_tax - vales_with_margin}\n`; 
     }
 
     // attach input events
     document.querySelectorAll(".qty, .cost").forEach(input => {
         input.addEventListener("input", calculateAll);
     });
+    overhead.addEventListener("input", calculateAll);
     margin.addEventListener("input", calculateAll);
     tax.addEventListener("input", calculateAll);
 

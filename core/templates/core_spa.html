@@ -40,4 +40,24 @@
 
 <script src="/static/sidebar.js"></script>
 <script src="/static/content_ajax.js"></script>
+
+<script>
+    function addProject() {
+        fetch("{% url 'add_empty_project' %}", {
+            method: "POST",
+            headers: { "X-CSRFToken": getCookie("csrftoken") }
+        })
+        .then(() => loadContent("{% url 'quotation' %}"));  // refresh the content div
+    }
+
+    // CSRF helper
+    function getCookie(name) {
+        let cookieValue = null;
+        document.cookie.split(';').forEach(cookie => {
+            const [k, v] = cookie.trim().split('=');
+            if (k === name) cookieValue = decodeURIComponent(v);
+        });
+        return cookieValue;
+    }
+</script>
 </html>

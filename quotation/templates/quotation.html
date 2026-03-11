@@ -105,18 +105,28 @@
             </div>
         {% endfor %}
         
+        <!-- <div class="card">
+            <div class="add_new_project" style="position: relative;">
+                <img src="{% static 'quotation/images/wall.jpeg' %}" alt="">
+
+                <a href="{% url 'add_empty_project' %}">
+                    <div class="add_new_project_center"><span>+</span></div>
+                </a>
+            </div>
+            <div class="container"><summary><b>Add Project</b></summary></div>
+        </div>
+        -->
+        
         <div class="card">
             <div class="add_new_project" style="position: relative;">
                 <img src="{% static 'quotation/images/wall.jpeg' %}" alt="">
 
-                <div class="add_new_project_center"><span>+</span></div>
+                <div class="add_new_project_center" onclick="addProject()">
+                    <span>+</span>
+                </div>
             </div>
-            <div class="container">
-                <!-- <p>Add Project</p> -->
-                 <summary><b>Add Project</b></summary>
-   
-            </div>
-        </div>
+            <div class="container"><summary><b>Add Project</b></summary></div>
+        </div> 
 
       
     </div>
@@ -128,4 +138,6 @@
 
     
 </div>
+
+
     

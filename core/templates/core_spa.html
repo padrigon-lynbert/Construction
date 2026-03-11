@@ -47,8 +47,9 @@
             method: "POST",
             headers: { "X-CSRFToken": getCookie("csrftoken") }
         })
-        .then(() => loadContent("{% url 'quotation' %}"));  // refresh the content div
+        .then(() => loadContent("{% url 'quotation' %}"));
     }
+
 
     // CSRF helper
     function getCookie(name) {
@@ -60,4 +61,6 @@
         return cookieValue;
     }
 </script>
+
+
 </html>

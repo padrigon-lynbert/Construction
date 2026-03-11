@@ -1,5 +1,6 @@
 from multiprocessing import context
 from os import name
+from tkinter.tix import STATUS
 from urllib import request
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -41,3 +42,9 @@ def add_empty_project(request):
         )
         return JsonResponse({"success": True})
     return JsonResponse({"error": "Invalid Method"}, status = 400)
+
+@csrf_exempt
+def delete_project(request, id):
+    Project.objects.filter(id=id).delete()
+    
+    return render(request, "core_spa.html")

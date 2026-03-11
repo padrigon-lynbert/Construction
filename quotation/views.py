@@ -2,7 +2,8 @@ from multiprocessing import context
 from os import name
 from tkinter.tix import STATUS
 from urllib import request
-from django.http import JsonResponse
+
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
@@ -46,5 +47,4 @@ def add_empty_project(request):
 @csrf_exempt
 def delete_project(request, id):
     Project.objects.filter(id=id).delete()
-    
-    return render(request, "core_spa.html")
+    return HttpResponse("object deleted")

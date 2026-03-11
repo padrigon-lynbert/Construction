@@ -117,7 +117,7 @@
                     <img src="{% static 'quotation/images/wall.jpeg' %}" alt="">
 
                     <div class="delete_project_bottom_left" onclick="event.stopPropagation(); event.preventDefault();
-                        window.location.href='{% url 'delete_project' i.id %}'">
+                        deleteProject({{ i.id }});">
                         <span>X</span>
                     </div>
                 </a>
@@ -141,8 +141,6 @@
             </div>
             <div class="container"><summary><b>Add Project</b></summary></div>
         </div> 
-
-      
     </div>
 
     <!-- <div class="more">

@@ -50,6 +50,11 @@
         .then(() => loadContent("{% url 'quotation' %}"));
     }
 
+    function deleteProject(id) {
+        fetch(`quotation/delete_project/${id}/`)
+            .then(() => loadContent("{% url 'quotation' %}"));
+    }
+
 
     // CSRF helper
     function getCookie(name) {

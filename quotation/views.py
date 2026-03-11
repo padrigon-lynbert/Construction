@@ -7,16 +7,20 @@ from .models import Project
 # Create your views here.
 
 def quotation(request):
-    return render(request, "quotation.html")
+    projects = Project.objects.all()
 
-def individual_quotation(request):
-    project = Project.objects.first()
-    item = project.items if project else None
+    context = {
+        'projects': projects
+    }
+
+    return render(request, "quotation.html", context)
+
+def individual_quotation(request, id):
+    project = Project.objects.get(id=id)
+    items = project.items.all()
 
     context = {
         'project': project,
-        'item': item
+        'items': items
     }
     return render(request, "individual_quotation.html", context)
-
-

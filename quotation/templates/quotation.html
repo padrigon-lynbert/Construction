@@ -51,9 +51,10 @@
 }
 
 .quotation_projects .card .container p {
-    height: 150px;
+    max-height: 150px;
     overflow: scroll;
     padding-left: 20px;
+    min-height: auto;
 }
 </style>
 
@@ -68,41 +69,22 @@
         {% load static %}
 
     
-        <div class="card">
-            <a href="{% url 'individual_quotation' %}">
-                <img src="{% static 'quotation/images/wall.jpeg' %}" alt="">
-            </a>
-            <div class="container">
-                <details>
-                    <summary><b>Project Name</b></summary>
-                    <p> 
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam cupiditate dolores quis repudiandae neque rerum beatae architecto minus in odio, omnis animi voluptate et? Ducimus autem qui repellendus fuga fugiat aspernatur reprehenderit aliquid commodi maxime accusantium rerum adipisci, voluptatibus, quidem vitae porro dolorem quam placeat! Esse numquam dolor excepturi nobis?
-                    </p>
-                </details>
-            </div>
-        </div> 
         
-        <div class="card">
-            <img src="{% static 'quotation/images/wall.jpeg' %}" alt="">
-            <div class="container">
-                <details>
-                    <summary><b>Project Name</b></summary>
-                    <p>Project Description</p>
-                </details>
+        {% for i in projects %}
+            <div class="card">
+                <a href="{% url 'individual_quotation' i.id %}">
+                    <img src="{% static 'quotation/images/wall.jpeg' %}" alt="">
+                </a>
+                <div class="container">
+                    <details>
+                        <summary><b>{{ i.name }}</b></summary>
+                        <p>{{ i.details }}</p>
+                    </details>
+                </div>
             </div>
-        </div>
-<!--         
-        <div class="card">
-            <img src="{% static 'quotation/images/wall.jpeg' %}" alt="">
-            <div class="container">
-                <details>
-                    <summary><b>Project Name</b></summary>
-                    <p style="height: 100px; overflow: scroll;">Project Description</p>
-                </details>
-            </div>
-        </div>
-
-        <div class="card">
+        {% endfor %}
+        
+        <!-- <div class="card">
             <img src="{% static 'quotation/images/wall.jpeg' %}" alt="">
             <div class="container">
                 <details>
@@ -111,6 +93,8 @@
                 </details>
             </div>
         </div> -->
+
+      
     </div>
 
     <!-- <div class="more">

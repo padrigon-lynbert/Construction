@@ -4,5 +4,5 @@ from . import views
 
 urlpatterns = [
     path("quotation/", views.quotation, name="quotation"),
-    path("individual_quotation/", views.individual_quotation, name="individual_quotation"),
+    path("individual_quotation/<int:id>", views.individual_quotation, name="individual_quotation"),
 ]

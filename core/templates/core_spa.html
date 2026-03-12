@@ -36,10 +36,27 @@
 
     <div class="content"></div>
 </body>
-<script>const defaultPage = "{% url 'quotation' %}";</script>
 
+<!-- js reads -->
+<!-- in other words letting js read these variables to be used in another file -->
+<script>
+    // content_ajax.js
+    // content_ajax.js needs this variable to know which page to load when the website is first opened
+    const defaultPage = "{% url 'quotation' %}";
+
+    // project_list.js
+    const urls = {
+        addProject: "{% url 'add_empty_project' %}",
+        quotation: "{% url 'quotation' %}"
+    }
+</script>
+
+
+<!-- sidebar functionality -->
 <script src="/static/sidebar.js"></script>
+<!-- load different pages as content using ajax instead or rendering (rendering is slow)-->
 <script src="/static/content_ajax.js"></script>
+
 <script src="/static/project_list.js"></script>
 
 

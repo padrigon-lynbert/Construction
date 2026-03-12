@@ -1,14 +1,14 @@
 function addProject() {
-    fetch("{% url 'add_empty_project' %}", {
+    fetch(urls.addProject, {
         method: "POST",
         headers: { "X-CSRFToken": getCookie("csrftoken") }
     })
-    .then(() => loadContent("{% url 'quotation' %}"));
+    .then(() => loadContent(urls.quotation));
 }
 
 function deleteProject(id) {
     fetch(`quotation/delete_project/${id}/`)
-        .then(() => loadContent("{% url 'quotation' %}"));
+        .then(() => loadContent(urls.quotation));
 }
 
 // Search functionality

@@ -36,7 +36,7 @@
 
     <div class="content"></div>
 </body>
-<script>const defaultPage = "{% url 'leads' %}";</script>
+<script>const defaultPage = "{% url 'quotation' %}";</script>
 
 <script src="/static/sidebar.js"></script>
 <script src="/static/content_ajax.js"></script>
@@ -54,6 +54,23 @@
         fetch(`quotation/delete_project/${id}/`)
             .then(() => loadContent("{% url 'quotation' %}"));
     }
+
+    // Search functionality
+    document.addEventListener("input", function(e){
+
+        if(e.target.id === "search"){
+
+            const query = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll(".project-card");
+
+            cards.forEach(card=>{
+                const name = card.dataset.name;
+                card.style.display = name.includes(query) ? "block" : "none";
+            });
+
+        }
+
+    });
 
 
     // CSRF helper

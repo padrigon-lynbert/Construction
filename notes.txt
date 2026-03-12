@@ -1,20 +1,6 @@
 LEAD MANAGEMENT
 
-	Company Name
-	Contact Person
-	Contact Info (phone)
-	Email
-	Project Type (dropdown)
-	Lead Source (optional but important long term)
-	Status (New / Contacted / Qualified / Proposal Sent / Won / Lost)
-	Estimated Budget (optional but powerful)
-	Deadline / Target Start Date
-	Notes
-	Assigned To (if team later)
-	
-
 QUOTATION
-
 
 	Item Name
 	Description (optional, recommended)
@@ -45,4 +31,5 @@ Note:
 
 
 Add:
-project manager
+project manager,
+indiv_project: labor table an direct cost

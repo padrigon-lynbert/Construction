@@ -147,25 +147,3 @@
 
     
 </div>
-
-<script>
-
-    // Search functionality 
-    const searchInput = document.getElementById('search'); 
-
-    searchInput.addEventListener("input", function(){
-
-        const query = this.value.toLowerCase();
-        const cards = document.querySelectorAll(".project-card");
-
-        cards.forEach(card => {
-            const name = card.dataset.name;
-
-            if(name.includes(query)){
-                card.style.display = "block";
-            } else {
-                card.style.display = "none";
-            }
-        })
-    })
-</script>

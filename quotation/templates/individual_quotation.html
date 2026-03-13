@@ -45,6 +45,26 @@
         margin: 2rem;
     }
 
+    /* hide input */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    /* remove box when inputting data */
+details p.selected_cell,
+.indirect_cost-bar input.selected_cell {
+    border: none;
+    outline: none;
+    background: transparent;
+    font: inherit;
+}
+
 </style>
 <body>
     
@@ -80,9 +100,13 @@
             </details>
 
         <div class="indirect_cost-bar">
-            <p>overhead: <input type="number" id="overhead" value="10"> %</p>
-            <p>margin:<input type="number" id="margin" value="30"> %</p>
-            <p>tax: <input type="number" id="tax" value="10"> %</p>
+            <p><b>Indirect Costs (%)</b></p>
+            <p>overhead: <input type="number" class="selected_cell" id="overhead" data-field="overhead" data-id="{{ project.id }}" value="{{ project.overhead }}" style="width: 8ch;"
+                oninput="this.value = this.value.replace(/[^0-9.]/g,'')" style="width: 8ch;"></p>
+            <p>margin: <input class="selected_cell" type="number" id="margin" data-field="margin" value="{{ project.margin }}" style="width: 8ch;"
+                oninput="this.value = this.value.replace(/[^0-9.]/g,'')" style="width: 8ch;"></p>
+            <p>tax: <input class="selected_cell" type="number" id="tax" data-field="tax" data-id="{{ project.id }}" value="{{ project.tax }}" tabindex="0"
+                oninput="this.value = this.value.replace(/[^0-9.]/g,'')" style="width: 8ch;"></p>
         </div>
 
 
@@ -139,6 +163,7 @@
         }
         return cookieValue;
     }
+    
     // autosave for contenteditable cells with class= "selected_cell" -only for single fields (table not included)
     document.addEventListener('DOMContentLoaded', function() {
 
@@ -149,8 +174,8 @@
             cell.addEventListener("blur", function() {
 
                 const field = this.dataset.field;
-                const value = this.textContent;
-                const id = this.dataset.id;  // you must include data-id
+                const value = this.value === "" ? 0 : (this.value ?? this.textContent);
+                const id = this.dataset.id; 
                 const csrftoken = getCookie('csrftoken');
 
                 console.log("field:", field);

@@ -9,11 +9,12 @@ class Project(models.Model):
     name = models.CharField(max_length=750)
     details = models.CharField(max_length=255, null=True, blank=True)
     client_name = models.CharField(max_length=255)
-    margin = models.FloatField(default=0)  # in percent
-    tax = models.FloatField(default=0)     # in percent
+    overhead = models.FloatField(default=20)
+    margin = models.FloatField(default=30)  # in percent
+    tax = models.FloatField(default=12)     # in percent
 
 
-class ProjectItem(models.Model):
+class Project_Item(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="items")
     item_name = models.CharField(max_length=250, null=True, blank=True)
     quantity = models.FloatField(default=0)

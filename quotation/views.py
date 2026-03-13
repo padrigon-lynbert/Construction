@@ -2,6 +2,7 @@ from http.client import ImproperConnectionState
 from multiprocessing import context
 from os import name
 from tkinter.tix import STATUS
+from turtle import st
 from urllib import request
 import json
 
@@ -9,9 +10,7 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Project
-
-from .models import Project
+from .models import Project, Project_Item
 
 # Create your views here.
 
@@ -49,10 +48,9 @@ def update_individual_quotation(request):
             # Convert value type if necessary
             model_field = Project._meta.get_field(field)
             if isinstance(model_field, (models.IntegerField, models.FloatField, models.DecimalField)):
-                value = float(value)  # or int(value) depending on field
+                value = float(value) 
             elif isinstance(model_field, models.BooleanField):
                 value = value.lower() in ['true', '1', 'yes']
-            # Add more type conversions if needed
 
             setattr(project, field, value)
             project.save()
@@ -62,6 +60,35 @@ def update_individual_quotation(request):
             return JsonResponse({"status": "error", "message": str(e)})
 
     return JsonResponse({"status": "error", "message": "Invalid request"})
+
+
+@csrf_exempt
+def update_item(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            item_id = data.get("id")
+            field = data.get("field")
+            value = data.get("value")
+
+            # get the item
+            item = Project_Item.objects.get(id=item_id)
+
+            # cast value if necessary
+            if field in ["quantity", "unit_cost"]:
+                value = float(value)
+
+            # update the field dynamically
+            setattr(item, field, value)
+            item.save()
+
+            # project id if needed
+            project_id = item.project.id  
+
+            return JsonResponse({"status": "ok", "item_id": item_id, "project_id": project_id})
+
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)})
 
 @csrf_exempt
 def add_empty_project(request):
@@ -81,3 +108,4 @@ def add_empty_project(request):
 def delete_project(request, id):
     Project.objects.filter(id=id).delete()
     return HttpResponse("object deleted")
+

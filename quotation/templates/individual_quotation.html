@@ -121,10 +121,10 @@ details p.selected_cell,
                         <th></th>
                     </tr>
                    {% for item in project.items.all %}
-                        <tr>
-                            <td id="item_name" contenteditable="True">{{ item.item_name }}</td>
-                            <td><input type="number" class="qty" value="{{ item.quantity }}"></td>
-                            <td><input type="number" class="cost" value="{{ item.unit_cost }}"></td>
+                        <tr data-id="{{ item.id }}">
+                            <td class="table_edit_item" contenteditable="True" data-field="item_name">{{ item.item_name }}</td>
+                            <td><input type="number" class="table_edit_item qty" data-field="quantity" value="{{ item.quantity }}"></td>
+                            <td><input type="number" class="table_edit_item cost" data-field="unit_cost" value="{{ item.unit_cost }}"></td>
                             <td class="autocost" contenteditable="False"></td>
                             <td><button type="button">delete</button></td>
                         </tr>
@@ -163,7 +163,7 @@ details p.selected_cell,
         }
         return cookieValue;
     }
-    
+
     // autosave for contenteditable cells with class= "selected_cell" -only for single fields (table not included)
     document.addEventListener('DOMContentLoaded', function() {
 
@@ -205,6 +205,38 @@ details p.selected_cell,
         });
 
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    // table autosave for editable cells and inputs
+    const tableCells = document.querySelectorAll(".table_edit_item");
+
+    tableCells.forEach(cell => {
+        cell.addEventListener("blur", function() {
+            const field = this.dataset.field;
+            const value = this.value !== undefined ? this.value : this.textContent;
+            const id = this.closest("tr").dataset.id;
+            const csrftoken = getCookie('csrftoken');
+
+            console.log("table update:", field, value, id);
+
+            fetch("{% url 'update_item' %}", {
+                method: "POST",
+                headers:{
+                    "Content-Type":"application/json",
+                    "X-CSRFToken": csrftoken
+                },
+                body: JSON.stringify({
+                    id: id,
+                    field: field,
+                    value: value
+                })
+            })
+            .then(r => r.json())
+            .then(data => console.log(data))
+            .catch(err => console.error(err));
+        });
+    });
+});
 
 </script>
 </html>

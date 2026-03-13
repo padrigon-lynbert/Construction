@@ -52,19 +52,19 @@
 
         <div class="top_bar">
             <div class="top_bar_project_info">
-                <h1 contenteditable="True">{{ project.name }}</h1> 
+                <h1 class="selected_cell" contenteditable="true" tabindex="0" data-field="name" data-id="{{ project.id }}">{{ project.name }}</h1> 
                 <button type="button">help</button>
             </div>
 
             <div class="top_bar_target_info" style="display: flex; gap: 0.5rem;">
                 <label for="customer_name">Client:</label>
-                <p contenteditable="True">{{ project.client_name }}</p>
+                <p class="selected_cell" contenteditable="True" tabindex="0" data-field="client_name" data-id="{{ project.id }}">{{ project.client_name }}</p>
             </div>
             
             <span>
                 <details open>
-                    <summary >Project Details</summary>
-                    <p contenteditable="true">{{ project.details }}</p>
+                    <summary>Project Details</summary>
+                    <p class="selected_cell" contenteditable="true" tabindex="0" data-field="details" data-id="{{ project.id }}">{{ project.details }}</p>
                 </details>
             </span>
 
@@ -113,7 +113,7 @@
 
             <button type="submit">Export</button>
             
-        </form>
+    </form>
     
 </body>
 
@@ -121,4 +121,65 @@
 <script src="/static/client_side_autocompute.js"></script>
 
 <!-- script -->
+ <!-- edit data -->
+
+<script>
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== ''){
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies){
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + '=')){
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    // autosave for contenteditable cells with class= "selected_cell" -only for single fields (table not included)
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const selected_cell = document.querySelectorAll(".selected_cell");
+
+        selected_cell.forEach(cell => {
+
+            cell.addEventListener("blur", function() {
+
+                const field = this.dataset.field;
+                const value = this.textContent;
+                const id = this.dataset.id;  // you must include data-id
+                const csrftoken = getCookie('csrftoken');
+
+                console.log("field:", field);
+                console.log("value:", value);
+
+                // fetch to Django
+                fetch("{% url 'update_individual_quotation' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrftoken
+                    },
+                    body: JSON.stringify({
+                        id: id,
+                        field: field,
+                        value: value
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Server response:", data);
+                })
+                .catch(error => console.error("Error:", error));
+
+            });
+
+        });
+
+    });
+
+</script>
 </html>

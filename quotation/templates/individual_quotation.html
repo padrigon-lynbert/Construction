@@ -145,6 +145,38 @@ details p.selected_cell,
                 </form>
             </div>
 
+            <div>
+                <label>Project Expected Duration: 
+                    <input type="number" id="duration_months" placeholder="Mo" style="width:5ch;">
+                    <input type="number" id="duration_days" placeholder="d" style="width:5ch;">
+                </label>
+
+                <p>labor cost: </p>
+            </div>
+
+            <div style="padding: 2rem;">
+                <table border="1" style="border-collapse: collapse;">
+                    <tr>
+                        <th style="padding: 0.5rem;">Role</th>
+                        <th style="padding: 0.5rem;">Rate/hour</th>
+                        <th style="padding: 0.5rem;">Hours/day</th>
+                        <th style="padding: 0.5rem;">Days/month</th>
+                        <th style="padding: 0.5rem;">autocost</th>
+                    </tr>
+                    {% for labor in project.labors.all %}
+                    <tr>
+                        <td style="padding: 0.5rem;">{{ labor.role }}</td>
+                        <td style="padding: 0.5rem;">{{ labor.rate_per_hour }}</td>
+                        <td style="padding: 0.5rem;">{{ labor.hours_per_day }}</td>
+                        <td style="padding: 0.5rem;">{{ labor.days_per_month }}</td>
+                        <td style="padding: 0.5rem;"></td>
+                        <td style="padding: 0.5rem;"> <button>delete</button> </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <button>add</button>
+            </div>
+
             <button type="submit">Export</button>
             
     </form>

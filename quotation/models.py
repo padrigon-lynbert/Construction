@@ -1,8 +1,9 @@
 from ast import Pass
 from os import name
+from turtle import ondrag
 
 from django.db import models
-from numpy import multiply
+from numpy import multiply, true_divide
 
 # Create your models here.
 class Project(models.Model):
@@ -20,6 +21,11 @@ class Project_Item(models.Model):
     quantity = models.FloatField(default=0)
     unit_cost = models.FloatField(default=0)
     
-    # @property
-    # def autocost(self):
-    #     return self.quantity * self.unit_cost
+class Project_Labor(models.Model):
+    Project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="labors")
+    role = models.CharField(max_length=255, null=True, blank=True)
+    rate_per_hour = models.FloatField(default=0)
+    hours_per_day = models.FloatField(default=0)
+    days_per_month = models.FloatField(default=18)
+
+

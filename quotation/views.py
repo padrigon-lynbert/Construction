@@ -30,10 +30,12 @@ def quotation(request):
 def individual_quotation(request, id):
     project = Project.objects.get(id=id)
     items = project.items.all()
+    labors = project.labors.all()
 
     context = {
         'project': project,
-        'items': items
+        'items': items,
+        'labors': labors
     }
     return render(request, "individual_quotation.html", context)
 
@@ -74,7 +76,6 @@ def update_item(request):
             field = data.get("field")
             value = data.get("value")
 
-            # get the item
             item = Project_Item.objects.get(id=item_id)
 
             if field in ["quantity", "unit_cost"]:
@@ -90,9 +91,6 @@ def update_item(request):
         except Exception as e:
             return JsonResponse({"status": "error", "message": str(e)})
 
-@csrf_exempt
-def add_or_delete_item(request, id):
-    pass
 
 @csrf_exempt
 def add_or_delete_item(request, id):

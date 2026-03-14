@@ -1,5 +1,6 @@
 from http.client import ImproperConnectionState
 from multiprocessing import context
+from multiprocessing.heap import reduce_arena
 from os import name
 from tkinter.tix import STATUS
 from turtle import st
@@ -7,10 +8,13 @@ from urllib import request
 import json
 
 from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.csrf import csrf_exempt
+from django.db import models
+from numpy import delete
 
 from .models import Project, Project_Item
+
 
 # Create your views here.
 
@@ -32,9 +36,8 @@ def individual_quotation(request, id):
         'items': items
     }
     return render(request, "individual_quotation.html", context)
-from django.db import models
-@csrf_exempt
 
+@csrf_exempt
 def update_individual_quotation(request):
     if request.method == "POST":
         try:
@@ -74,21 +77,43 @@ def update_item(request):
             # get the item
             item = Project_Item.objects.get(id=item_id)
 
-            # cast value if necessary
             if field in ["quantity", "unit_cost"]:
                 value = float(value)
 
-            # update the field dynamically
             setattr(item, field, value)
             item.save()
 
-            # project id if needed
             project_id = item.project.id  
 
             return JsonResponse({"status": "ok", "item_id": item_id, "project_id": project_id})
 
         except Exception as e:
             return JsonResponse({"status": "error", "message": str(e)})
+
+@csrf_exempt
+def add_or_delete_item(request, id):
+    pass
+
+@csrf_exempt
+def add_or_delete_item(request, id):
+    project = Project.objects.get(id=id)
+
+    action = request.POST.get('action')
+
+    if action == 'add':
+        Project_Item.objects.create(
+            project=project,
+            item_name="New Item",
+            quantity=0,
+            unit_cost=0
+        )
+
+    elif action == 'delete':
+        item_id = request.POST.get('item_id')
+        if item_id:
+            Project_Item.objects.filter(id=item_id, project=project).delete()
+
+    return redirect('individual_quotation', id)
 
 @csrf_exempt
 def add_empty_project(request):

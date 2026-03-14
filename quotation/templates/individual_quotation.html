@@ -126,13 +126,23 @@ details p.selected_cell,
                             <td><input type="number" class="table_edit_item qty" data-field="quantity" value="{{ item.quantity }}"></td>
                             <td><input type="number" class="table_edit_item cost" data-field="unit_cost" value="{{ item.unit_cost }}"></td>
                             <td class="autocost" contenteditable="False"></td>
-                            <td><button type="button">delete</button></td>
+                            <td>
+                                <form method="post" action="{% url 'add_or_delete_item' project.id %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                                    <button name="action" value="delete">Delete</button>
+                                </form>
+                            </td>
                         </tr>
                     {% endfor %}
                    
                     
                 </table>
-                <button type="button">add</button>
+
+                <form method="post" action="{% url 'add_or_delete_item' project.id %}">
+                    {% csrf_token %}
+                    <button name="action" value="add">Add Item</button>
+                </form>
             </div>
 
             <button type="submit">Export</button>
@@ -146,7 +156,6 @@ details p.selected_cell,
         update_individual_quotation: "{% url 'update_individual_quotation' %}",
         update_item: "{% url 'update_item' %}"
     }
-
 </script>
 <!-- script for autocalculation when numbers change (client side)-->
 <script src="/static/client_side_autocompute.js"></script>
@@ -156,77 +165,12 @@ details p.selected_cell,
 
 <script>
 
+// const addItemButton = document.querySelector('.add_item');
+// addItemButton.addEventListener('click', function() {
+//     const table = document.querySelector('.individual_quotation_table table');
 
+    
 
-    // autosave for contenteditable cells with class= "selected_cell" -only for single fields (table not included)
-    document.addEventListener('DOMContentLoaded', function() {
-
-        const selected_cell = document.querySelectorAll(".selected_cell");
-
-        selected_cell.forEach(cell => {
-
-            cell.addEventListener("blur", function() {
-
-                const field = this.dataset.field;
-                const value = this.value === "" ? 0 : (this.value ?? this.textContent);
-                const id = this.dataset.id; 
-                const csrftoken = getCookie('csrftoken');
-
-                console.log("field:", field);
-                console.log("value:", value);
-
-                fetch(urls.update_individual_quotation, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRFToken": csrftoken
-                    },
-                    body: JSON.stringify({
-                        id: id,
-                        field: field,
-                        value: value
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Server response:", data);
-                })
-                .catch(error => console.error("Error:", error));
-            });
-        });
-    });
-
-    // autosave for table cells with class="table_edit_item" - for items in the table
-    document.addEventListener('DOMContentLoaded', function() {
-    const tableCells = document.querySelectorAll(".table_edit_item");
-
-    tableCells.forEach(cell => {
-        cell.addEventListener("blur", function() {
-            const field = this.dataset.field;
-            const value = this.value !== undefined ? this.value : this.textContent;
-            const id = this.closest("tr").dataset.id;
-            const csrftoken = getCookie('csrftoken');
-
-            console.log("table update:", field, value, id);
-
-            fetch(urls.update_item, {
-                method: "POST",
-                headers:{
-                    "Content-Type":"application/json",
-                    "X-CSRFToken": csrftoken
-                },
-                body: JSON.stringify({
-                    id: id,
-                    field: field,
-                    value: value
-                })
-            })
-            .then(r => r.json())
-            .then(data => console.log(data))
-            .catch(err => console.error(err));
-        });
-    });
-});
-
+    
 </script>
 </html>
